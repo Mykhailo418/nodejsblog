@@ -1,0 +1,37 @@
+<%- include('header', {}); %>
+
+<h1>Posts</h1>
+
+<% if(posts){ %>
+	<div class="posts">
+	 <% posts.forEach(function(post){ %>
+		<ul>
+		 	<li>
+		 		<strong>Title: </strong>
+		 		<%= post.title %>
+		 	</li>
+		 	<li>
+		 		<strong>Categorie: </strong>
+		 		<%= post.category %>
+		 	</li>
+		 	<li>
+		 		<strong>Content: </strong>
+		 		<%= post.content %>
+		 	</li>
+		 	<li>
+		 		<strong>Author: </strong>
+		 		<%= post.author %>
+		 	</li>
+		 	<li>
+		 		<strong>Date: </strong>
+		 		<%= moment(post.date).format('LLLL'); %>
+		 	</li>
+	 	</ul>
+	 <% }) %>
+	 </div>
+<% } %>
+<% if(!posts){ %>
+	<p>There are no posts</p>
+<% } %>
+
+<%- include('footer', {}); %>

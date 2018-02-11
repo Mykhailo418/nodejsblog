@@ -1,0 +1,9 @@
+<%- include('header', {}); %>
+
+<h1>Error <%= status %> <%= msg %></h1>
+
+<% if (stack) { %>
+	<pre><%= stack %></pre>
+<% } %>
+
+<%- include('footer', {}); %>
