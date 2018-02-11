@@ -5,7 +5,7 @@ const { check, validationResult } = require('express-validator/check');
 
 // GET routes
 router.get('/add', function(req, res, next){
-	res.render('add_category',getAddCategoryData({}));
+	res.render('add_category', getAddCategoryData({}));
 });
 
 // POST routes

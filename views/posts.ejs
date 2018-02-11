@@ -1,6 +1,6 @@
 <%- include('header', {}); %>
 
-<h1>Posts</h1>
+<h1><%= title %></h1>
 
 <% if(posts){ %>
 	<div class="posts">
@@ -12,7 +12,9 @@
 		 	</li>
 		 	<li>
 		 		<strong>Categorie: </strong>
-		 		<%= post.category %>
+		 		<a href="/posts/<%= post.category %>">
+		 			<%= convertSlugToTitle(post.category, cats) %>	
+		 		</a>
 		 	</li>
 		 	<li>
 		 		<strong>Content: </strong>

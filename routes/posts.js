@@ -1,13 +1,18 @@
 var express = require('express');
 var router = express.Router();
-const {getAllPosts, insertPosts, getAllСategories} = require('../middlewares/db_connection');
+const {getAllPosts, insertPosts, getAllСategories, getPostsBy} = require('../middlewares/db_connection');
 const { check, validationResult } = require('express-validator/check');
 
 /* GET posts listing. */
-router.get('/', function(req, res, next){
+router.get('/', addCatsToReq, function(req, res, next){
 	getAllPosts(function(err, posts){
 		if(err) throw err;
-		res.render('posts', {posts : posts});
+		console.log(req.extra_params.cats);
+		res.render('posts', getPostsData({
+			title: 'Posts', 
+			posts: posts, 
+			cats: req.extra_params.cats
+		}) );
 	});
 });
 
@@ -18,6 +23,19 @@ router.get('/add', function(req, res, next){
 		res.render('add_post', getAddPostData({
 			cats: cats
 		}));
+	});
+});
+
+router.get('/:category', addCatsToReq, function(req, res, next){
+	getPostsBy({
+		category: req.params.category
+	}, function(err, posts){
+		if(err) throw err;
+		res.render('posts', getPostsData({
+			title: 'Posts by '+res.locals.convertSlugToTitle(req.params.category, req.extra_params.cats), 
+			posts: posts, 
+			cats: req.extra_params.cats
+		}) );
 	});
 });
 
@@ -61,6 +79,14 @@ function getAddPostData(obj){
 	return {
 		fields: obj.fields,
 		errors: obj.errors,
+		cats: obj.cats
+	};
+}
+
+function getPostsData(obj){
+	return {
+		title: obj.title,
+		posts : obj.posts, 
 		cats: obj.cats
 	};
 }

@@ -8,6 +8,11 @@ module.exports.getAllPosts = function(callback){
 	posts.find({}, {}, callback);
 }
 
+module.exports.getPostsBy = function(obj, callback){
+	let posts = db.get('posts');
+	posts.find(obj, {sort: {title: 1}}, callback);
+}
+
 module.exports.getAllСategories = function(callback){
 	let cats = db.get('categories');
 	cats.find({}, {}, callback);

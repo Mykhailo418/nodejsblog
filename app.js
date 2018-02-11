@@ -14,7 +14,21 @@ var categories = require('./routes/categories');
 
 var app = express();
 
+// Locals
 app.locals.moment = require('moment');
+app.use(function(req, res, next){
+  res.locals.convertSlugToTitle = function(slug, cats){
+    if(cats && Array.isArray(cats)){
+      for(let i = 0; i < cats.length; i++){
+        if(cats[i].slug == slug){
+          return cats[i].name;
+        }
+      }
+    } 
+    return slug;
+  }
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
