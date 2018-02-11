@@ -25,16 +25,17 @@ router.get('/add', function(req, res, next){
 router.post('/add', 
 	check('title').custom(checkIsEmpty).withMessage('Title should not be empty'),
 	check('content').custom(checkIsEmpty).withMessage('Content should not be empty'),
+	addCatsToReq,
 	function(req, res, next){
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			//console.log(errors.mapped());
 			console.log(req.body);
-			getAllСategories(function(err, cats){
-				if(err) throw err;
-				console.log(cats);
-				res.render('add_post', getAddPostData({ errors: errors.mapped(), fields: req.body, cats: cats }) );
-			});
+			res.render('add_post', getAddPostData({ 
+				errors: errors.mapped(), 
+				fields: req.body, 
+				cats: req.extra_params.cats
+			}) );
 		}else{
 			insertPosts({
 				title: req.body.title,
@@ -71,4 +72,16 @@ function checkIsEmpty(value,args){
 	}else{
 		return true;
 	}
+}
+
+// add categories to req
+
+function addCatsToReq(req, res, next){
+	getAllСategories(function(err, cats){
+		if(err) throw err;
+		req.extra_params = {
+			cats
+		};
+		next();
+	});
 }
