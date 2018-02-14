@@ -1,0 +1,70 @@
+<%- include('header', {}); %>
+
+<% if(success){ %>
+	<h3><%= success %></h3>
+<% } %>
+
+<h1><%= post.title %></h1>
+
+<p><%= post.content %></p>
+
+<ul>
+	<li>
+		<strong>Categorie: </strong>
+		<a href="/posts/<%= post.category %>">
+			<%= convertSlugToTitle(post.category, cats) %>	
+		</a>
+	</li>
+	<li>
+		<strong>Author: </strong>
+		<%= post.author %>
+	</li>
+	<li>
+		<strong>Date: </strong>
+		<%= moment(post.date).format('LLLL'); %>
+	</li>
+</ul>
+
+<hr />
+
+<% if (errors && typeof errors == 'object') { %>
+	<ul>
+  	<% for(var k in errors){ %>
+  		<li><%= errors[k].msg; %></li>
+  	<% } %>
+  	</ul>
+<% } %>
+
+<% if (post.comments && post.comments.length) { %>
+	<% for(var k in post.comments){ %>
+		<div>
+			<h4><a href="mailto:<%= post.comments[k].email %>"><%= post.comments[k].name %></a></h4>
+			<p><%= post.comments[k].content %></p>
+		</div>
+	<% } %>
+<% } %>
+
+<form method="POST" action="/posts/add_comment">
+	<input type="hidden" name="post_id" value="<%= post._id %>">
+	<div class="form-group">
+		<label>Name:</label>
+		<input type="text" name="name" 
+			<% if (fields_cooment) { %> value="<%= fields_cooment.name; %>" <% } %>
+		/>
+	</div>
+	</div>
+	<div class="form-group">
+		<label>Email:</label>
+		<input type="text" name="email" 
+			<% if (fields_cooment) { %> value="<%= fields_cooment.email; %>" <% } %>
+		/>
+	</div>
+	</div>
+	<div class="form-group">
+		<label>Content:</label>
+		<textarea name="content" rows="4"><% if (fields_cooment) { %><%= fields_cooment.content; %> <% } %></textarea>
+	</div>
+	<input type="submit" value="Submit">
+</form>
+
+<%- include('footer', {}); %>

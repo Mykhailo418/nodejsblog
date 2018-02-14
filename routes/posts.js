@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {getAllPosts, insertPosts, getAllСategories, getPostsBy} = require('../middlewares/db_connection');
+const {getAllPosts, insertPosts, getAllСategories, getPostsBy, addComment} = require('../middlewares/db_connection');
 const { check, validationResult } = require('express-validator/check');
 
 /* GET posts listing. */
@@ -23,6 +23,23 @@ router.get('/add', function(req, res, next){
 		res.render('add_post', getAddPostData({
 			cats: cats
 		}));
+	});
+});
+
+router.get('/show/:id', addCatsToReq, function(req, res, next){
+	getPostsBy({_id: req.params.id}, function(err, post){
+		if(err) throw err;
+		if(post && post.length){
+			res.render('post', getPostData({
+				post: post[0], 
+				cats: req.extra_params.cats,
+				success: req.flash('success')
+			}) );
+		}else{
+			req.flash('msg', 'Sorry. Post not found!');
+			res.location('/');
+			res.redirect('/');
+		}
 	});
 });
 
@@ -71,6 +88,47 @@ router.post('/add',
 	}
 );
 
+router.post('/add_comment', 
+	check('name').custom(checkIsEmpty).withMessage('Name should not be empty'),
+	check('email').custom(checkIsEmpty).withMessage('Email should not be empty'),
+	check('email').isEmail().withMessage('Email must be an email'),
+	check('content').custom(checkIsEmpty).withMessage('Content should not be empty'),
+	addCatsToReq,
+	function(req, res, next){
+		const errors = validationResult(req);
+		let comment_data = {
+			name: req.body.name,
+			email: req.body.email,
+			content: req.body.content,
+			date: Date.now()
+		};
+		if (!errors.isEmpty()) {
+			getPostsBy({_id: req.body.post_id}, function(err, post){
+				if(err) throw err;
+				if(post && post.length){
+					res.render('post', getPostData({
+						errors: errors.mapped(), 
+						post: post[0], 
+						cats: req.extra_params.cats,
+						fields_cooment: comment_data
+					}) );
+				}else{
+					req.flash('msg', 'Sorry. Post not found!');
+					res.location('/');
+					res.redirect('/');
+				}
+			});
+		}else{
+			addComment(req.body.post_id, comment_data, function(err, doc){
+				if(err) throw err;
+				req.flash('success', 'Comment wad added!');
+				res.location('/posts/show/'+req.body.post_id);
+				res.redirect('/posts/show/'+req.body.post_id);
+			});
+		}
+	}
+);
+
 module.exports = router;
 
 /* Helpers */
@@ -88,6 +146,16 @@ function getPostsData(obj){
 		title: obj.title,
 		posts : obj.posts, 
 		cats: obj.cats
+	};
+}
+
+function getPostData(obj){
+	return {
+		post : obj.post, 
+		cats: obj.cats,
+		fields_cooment: obj.fields_cooment,
+		errors: obj.errors,
+		success: obj.success
 	};
 }
 

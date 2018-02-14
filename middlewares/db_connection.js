@@ -13,6 +13,16 @@ module.exports.getPostsBy = function(obj, callback){
 	posts.find(obj, {sort: {title: 1}}, callback);
 }
 
+module.exports.addComment = function(post_id, data, callback){
+	let posts = db.get('posts');
+	console.log('addCOment = ',post_id, data);
+	posts.update({"_id" : post_id}, {
+		$push: {
+			comments: data
+		}
+	}, callback);
+}
+
 module.exports.getAllСategories = function(callback){
 	let cats = db.get('categories');
 	cats.find({}, {}, callback);
