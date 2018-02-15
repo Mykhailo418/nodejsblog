@@ -1,26 +1,28 @@
 <%- include('header', {}); %>
 
-<h1>Add Post</h1>
+<h1 class="text-center">Add Post</h1>
 
 <% if (errors && typeof errors == 'object') { %>
-	<ul>
-  	<% for(var k in errors){ %>
-  		<li><%= errors[k].msg; %></li>
-  	<% } %>
-  	</ul>
+	<div class="alert alert-danger">
+		<ul>
+	  	<% for(var k in errors){ %>
+	  		<li><%= errors[k].msg; %></li>
+	  	<% } %>
+	  	</ul>
+  	</div>
 <% } %>
 
-<form method="POST" action="/posts/add">
+<form method="POST" class="form" action="/posts/add">
 	<div class="form-group">
 		<label>Title:</label>
-		<input type="text" name="title" 
+		<input class="form-control" type="text" name="title" 
 			<% if (fields) { %> value="<%= fields.title; %>" <% } %>
 		/>
 	</div>
 	<div class="form-group">
 		<label>Category:</label>
 
-		<select name="category">
+		<select name="category" class="form-control">
 			<option 
 				<% if (!fields || !fields.category){ %>
 				selected="1" 
@@ -36,19 +38,17 @@
 			<% } %>
 		</select>
 	</div>
-	</div>
 	<div class="form-group">
 		<label>Author:</label>
-		<input type="text" name="author" 
+		<input class="form-control" type="text" name="author" 
 			<% if (fields) { %> value="<%= fields.author; %>" <% } %>
 		/>
 	</div>
-	</div>
 	<div class="form-group">
 		<label>Content</label>
-		<textarea name="content" rows="4"><% if (fields) { %><%= fields.content; %> <% } %></textarea>
+		<textarea class="form-control" name="content" rows="4"><% if (fields) { %><%= fields.content; %> <% } %></textarea>
 	</div>
-	<input type="submit" value="Submit">
+	<input type="submit" value="Submit" class="btn btn-success">
 </form>
 
 <%- include('footer', {}); %>

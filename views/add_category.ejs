@@ -1,23 +1,25 @@
 <%- include('header', {}); %>
 
-<h1>Add Category</h1>
+<h1 class="text-center">Add Category</h1>
 
 <% if (errors && typeof errors == 'object') { %>
-	<ul>
-  	<% for(var k in errors){ %>
-  		<li><%= errors[k].msg; %></li>
-  	<% } %>
-  	</ul>
+	<div class="alert alert-danger">
+		<ul>
+	  	<% for(var k in errors){ %>
+	  		<li><%= errors[k].msg; %></li>
+	  	<% } %>
+	  	</ul>
+  	</div>
 <% } %>
 
-<form method="POST" action="/categories/add">
+<form method="POST" class="form" action="/categories/add">
 	<div class="form-group">
 		<label>Title:</label>
-		<input type="text" name="title" 
+		<input type="text" name="title" class="form-control"
 			<% if (fields) { %> value="<%= fields.title; %>" <% } %>
 		/>
 	</div>
-	<input type="submit" value="Submit">
+	<input type="submit" value="Submit" class="btn btn-success">
 </form>
 
 <%- include('footer', {}); %>

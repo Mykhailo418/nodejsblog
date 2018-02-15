@@ -2,24 +2,21 @@
 <html>
 <head>
 	<title>Blog</title>
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<!-- <link rel="stylesheet" type="text/css" href="/css/style.css"> -->
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/blog.css">
 </head>
 <body>
-	<header>
-		<nav>
-			<ul>
-				<li>
-					<a href="/">Home</a>
-				</li>
-				<li>
-					<a href="/posts">Posts</a>
-				</li>
-				<li>
-					<a href="/posts/add">Add Post</a>
-				</li>
-				<li>
-					<a href="/categories/add">Add Category</a>
-				</li>
-			</ul>
-		</nav>
+	<header class="blog-header py-3">
+		<div class="container">
+			<nav class="nav">
+				<a class="p-2 text-muted" href="/">Home</a>
+				<a class="p-2 text-muted" href="/posts">Posts</a>
+				<a class="p-2 text-muted" href="/posts/add">Add Post</a>
+				<a class="p-2 text-muted" href="/categories/add">Add Category</a>
+			</nav>
+		</div>
 	</header>
+
+	<section>
+		<div class="container">
